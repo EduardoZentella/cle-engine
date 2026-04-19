@@ -201,6 +201,12 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Pretrained reranker artifacts
+models/final_reranker/*.pkl
+models/final_reranker/*.pickle
+models/final_reranker/*.joblib
+models/final_reranker/manifest.json
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

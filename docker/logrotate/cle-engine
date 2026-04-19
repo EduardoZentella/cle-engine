@@ -1,0 +1,10 @@
+/var/log/cle-engine/*.log {
+  daily
+  rotate 14
+  missingok
+  notifempty
+  compress
+  delaycompress
+  dateext
+  copytruncate
+}

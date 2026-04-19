@@ -1,0 +1,18 @@
+# Docker ignore file
+.git
+.gitignore
+.env
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.coverage
+.ruff_cache
+node_modules
+dist
+build
+.DS_Store
+*.log
+.cursorindexingignore
