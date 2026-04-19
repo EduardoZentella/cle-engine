@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "model_file": "model.pkl",
+  "score_method": "predict_proba",
+  "positive_class_index": 1,
+  "threshold": 0.55,
+  "feature_order": [
+    "semantic_similarity",
+    "fusion_score",
+    "vector_score",
+    "lexical_score",
+    "llm_score",
+    "source_vector",
+    "source_lexical",
+    "source_hybrid",
+    "source_llm_refine"
+  ]
+}
