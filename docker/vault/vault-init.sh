@@ -85,6 +85,7 @@ vault kv put secret/cle-engine/backend \
   DATABASE_URL="${BACKEND_DATABASE_URL:-postgresql://admin:local_dev@db:5432/cle_engine}" \
   EMBEDDING_BACKEND="${BACKEND_EMBEDDING_BACKEND:-llm_api}" \
   INTELLIGENCE_BACKEND="${BACKEND_INTELLIGENCE_BACKEND:-generic_http}" \
+  GEMINI_API_KEY="${GEMINI_API_KEY:-}" \
   LLM_API_KEY="${LLM_API_KEY:-}" \
   LLM_EMBEDDING_MODEL="${LLM_EMBEDDING_MODEL:-text-embedding-3-small}" \
   LLM_EMBEDDING_URL="${LLM_EMBEDDING_URL:-https://api.openai.com/v1/embeddings}" \

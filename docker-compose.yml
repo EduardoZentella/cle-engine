@@ -57,13 +57,10 @@ services:
       VAULT_ADDR: http://vault:8200
       VAULT_TOKEN: ${VAULT_DEV_ROOT_TOKEN_ID:?Set VAULT_DEV_ROOT_TOKEN_ID in .env}
       BACKEND_DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-cle_engine}
-      BACKEND_EMBEDDING_BACKEND: ${BACKEND_EMBEDDING_BACKEND:-llm_api}
-      BACKEND_INTELLIGENCE_BACKEND: ${BACKEND_INTELLIGENCE_BACKEND:-generic_http}
-      LLM_API_KEY: ${LLM_API_KEY:?Set LLM_API_KEY in .env}
-      LLM_EMBEDDING_MODEL: ${LLM_EMBEDDING_MODEL:-text-embedding-3-small}
-      LLM_EMBEDDING_URL: ${LLM_EMBEDDING_URL:-https://api.openai.com/v1/embeddings}
-      LLM_COMPLETION_MODEL: ${LLM_COMPLETION_MODEL:-gpt-4o-mini}
-      LLM_COMPLETION_URL: ${LLM_COMPLETION_URL:-https://api.openai.com/v1/chat/completions}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?Set GEMINI_API_KEY in .env}
+      EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-384}
+      DB_POOL_MIN_SIZE: ${DB_POOL_MIN_SIZE:-1}
+      DB_POOL_MAX_SIZE: ${DB_POOL_MAX_SIZE:-10}
       FINAL_RERANKER_MODEL_DIR: ${FINAL_RERANKER_MODEL_DIR:-models/final_reranker}
       FINAL_RERANKER_MANIFEST_FILE: ${FINAL_RERANKER_MANIFEST_FILE:-manifest.json}
       BACKEND_PYTHONUNBUFFERED: "1"
@@ -102,7 +99,7 @@ services:
       - ./docker/vault:/vault/scripts:ro
     command: >
       sh -c "sh /vault/scripts/run-with-vault-env.sh backend secret/data/cle-engine/backend --
-      sh -c 'uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload 2>&1 | tee -a /var/log/cle-engine/backend.log'"
+      sh -c 'uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug'"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 10s

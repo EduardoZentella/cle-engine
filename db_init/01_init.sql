@@ -251,7 +251,7 @@ VALUES
     'es',
     'de',
     'A2',
-    'University District',
+    'Cologne',
     'urban',
     'Student profile: native Spanish speaker, English C1, German A2.',
     jsonb_build_object(
@@ -283,7 +283,7 @@ VALUES
     'ru',
     'de',
     'B1',
-    'University District',
+    'Cologne',
     'urban',
     'Student profile: native Russian and Spanish speaker, English C1, German B1.',
     jsonb_build_object(
@@ -316,7 +316,7 @@ VALUES
     'fa',
     'de',
     'A1',
-    'University District',
+    'Cologne',
     'urban',
     'Student profile: native Persian speaker, English C1, German A1.',
     jsonb_build_object(
@@ -353,3 +353,40 @@ SET
     profile_summary = EXCLUDED.profile_summary,
     metadata = EXCLUDED.metadata,
     updated_at = NOW();
+
+-- Performance metrics table for tracking pipeline stage timings
+CREATE TABLE IF NOT EXISTS performance_metrics (
+    id BIGSERIAL PRIMARY KEY,
+    stage VARCHAR(50) NOT NULL,
+    duration_ms FLOAT NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    attempt SMALLINT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_perf_metrics_stage ON performance_metrics(stage);
+CREATE INDEX IF NOT EXISTS idx_perf_metrics_user_id ON performance_metrics(user_id);
+CREATE INDEX IF NOT EXISTS idx_perf_metrics_created_at ON performance_metrics(created_at DESC);
+
+-- Debug logs table for detailed troubleshooting
+CREATE TABLE IF NOT EXISTS debug_logs (
+    id BIGSERIAL PRIMARY KEY,
+    level VARCHAR(10) NOT NULL,
+    message TEXT NOT NULL,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    stage VARCHAR(50),
+    context JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_debug_logs_level ON debug_logs(level);
+CREATE INDEX IF NOT EXISTS idx_debug_logs_user_id ON debug_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_debug_logs_stage ON debug_logs(stage);
+CREATE INDEX IF NOT EXISTS idx_debug_logs_created_at ON debug_logs(created_at DESC);
+
+-- Extend users table with activity tracking columns
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS activity_count INT DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS level_confidence FLOAT DEFAULT 0.5;
